@@ -1,0 +1,55 @@
+EXPERIMENT ANALYSIS SUMMARY
+======================================================================
+
+Comparison: Baseline (Control) vs Experiment
+Groups analyzed: group a, group b, group c
+
+SIGNIFICANT FINDINGS (p < 0.05):
+--------------------------------------------------
+GROUP B - PIFb: DECREASED by 49.6% (p=0.0000)
+GROUP B - Penh: INCREASED by 120.4% (p=0.0000)
+GROUP B - MVb: DECREASED by 42.5% (p=0.0000)
+GROUP A - f: DECREASED by 38.6% (p=0.0000)
+GROUP C - Ti: INCREASED by 42.8% (p=0.0000)
+GROUP A - Ti: INCREASED by 71.1% (p=0.0000)
+GROUP B - PEFb: DECREASED by 31.0% (p=0.0000)
+GROUP A - Penh: INCREASED by 106.8% (p=0.0001)
+GROUP B - TVb: DECREASED by 30.9% (p=0.0002)
+GROUP B - Te: DECREASED by 26.8% (p=0.0006)
+GROUP C - Penh: INCREASED by 139.2% (p=0.0022)
+GROUP A - Te: INCREASED by 40.5% (p=0.0032)
+GROUP C - f: DECREASED by 27.4% (p=0.0042)
+
+
+DETAILED STATISTICS:
+--------------------------------------------------
+
+GROUP A:
+  f: Baseline=212.430±73.070, Exp=130.521±31.483, Change=-38.6%, p=0.0000
+  TVb: Baseline=1.203±0.161, Exp=3.135±9.238, Change=+160.5%, p=0.3811
+  MVb: Baseline=193.334±45.598, Exp=191.475±177.505, Change=-1.0%, p=0.9654
+  Penh: Baseline=0.409±0.040, Exp=0.846±0.442, Change=+106.8%, p=0.0001
+  Ti: Baseline=0.162±0.039, Exp=0.277±0.089, Change=+71.1%, p=0.0000
+  Te: Baseline=0.290±0.103, Exp=0.408±0.147, Change=+40.5%, p=0.0032
+  PIFb: Baseline=13.228±1.782, Exp=12.169±8.704, Change=-8.0%, p=0.6126
+  PEFb: Baseline=8.434±2.254, Exp=9.455±10.012, Change=+12.1%, p=0.6716
+
+GROUP B:
+  f: Baseline=182.993±74.613, Exp=190.966±58.605, Change=+4.4%, p=0.5505
+  TVb: Baseline=1.183±0.128, Exp=0.817±0.576, Change=-30.9%, p=0.0002
+  MVb: Baseline=164.523±50.569, Exp=94.550±55.062, Change=-42.5%, p=0.0000
+  Penh: Baseline=0.442±0.114, Exp=0.973±0.357, Change=+120.4%, p=0.0000
+  Ti: Baseline=0.179±0.048, Exp=0.190±0.073, Change=+5.9%, p=0.4309
+  Te: Baseline=0.377±0.144, Exp=0.276±0.135, Change=-26.8%, p=0.0006
+  PIFb: Baseline=12.047±2.055, Exp=6.074±3.102, Change=-49.6%, p=0.0000
+  PEFb: Baseline=7.054±2.312, Exp=4.866±2.488, Change=-31.0%, p=0.0000
+
+GROUP C:
+  f: Baseline=186.439±93.863, Exp=135.414±50.680, Change=-27.4%, p=0.0042
+  TVb: Baseline=1.157±0.139, Exp=1.485±1.191, Change=+28.4%, p=0.1320
+  MVb: Baseline=165.579±61.336, Exp=149.230±100.212, Change=-9.9%, p=0.4258
+  Penh: Baseline=0.442±0.086, Exp=1.056±1.075, Change=+139.2%, p=0.0022
+  Ti: Baseline=0.188±0.063, Exp=0.268±0.063, Change=+42.8%, p=0.0000
+  Te: Baseline=0.362±0.165, Exp=0.359±0.131, Change=-0.9%, p=0.9267
+  PIFb: Baseline=11.514±2.553, Exp=9.630±7.546, Change=-16.4%, p=0.1873
+  PEFb: Baseline=7.090±2.939, Exp=7.886±6.408, Change=+11.2%, p=0.5231

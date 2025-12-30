@@ -1,0 +1,104 @@
+ENHANCED EXPERIMENT ANALYSIS SUMMARY
+(Pre-Treatment vs Post-Treatment Analysis)
+======================================================================
+
+PRE->POST TREATMENT CHANGES
+--------------------------------------------------
+
+BASELINE:
+
+  GROUP A:
+    f: 282.20 -> 150.67 (-46.6%) ***
+    TVb: 1.11 -> 1.27 (+14.3%) *
+    MVb: 237.52 -> 152.11 (-36.0%) ***
+    Penh: 0.40 -> 0.42 (+4.7%) 
+    Ti: 0.12 -> 0.20 (+59.5%) ***
+    Te: 0.19 -> 0.38 (+98.2%) ***
+    PIFb: 14.92 -> 11.56 (-22.5%) ***
+    PEFb: 10.62 -> 6.38 (-40.0%) ***
+
+  GROUP B:
+    f: 299.46 -> 153.10 (-48.9%) ***
+    TVb: 1.01 -> 1.23 (+21.5%) ***
+    MVb: 241.82 -> 144.88 (-40.1%) ***
+    Penh: 0.37 -> 0.46 (+23.9%) 
+    Ti: 0.11 -> 0.20 (+72.6%) ***
+    Te: 0.17 -> 0.43 (+150.9%) ***
+    PIFb: 14.91 -> 11.33 (-24.1%) ***
+    PEFb: 10.59 -> 6.15 (-42.0%) ***
+
+  GROUP C:
+    f: 335.71 -> 181.46 (-45.9%) 
+    TVb: 0.99 -> 1.16 (+18.0%) 
+    MVb: 284.33 -> 161.62 (-43.2%) *
+    Penh: 0.41 -> 0.44 (+8.4%) 
+    Ti: 0.11 -> 0.19 (+80.6%) 
+    Te: 0.13 -> 0.37 (+181.3%) 
+    PIFb: 15.86 -> 11.37 (-28.3%) 
+    PEFb: 12.35 -> 6.91 (-44.0%) 
+
+EXPERIMENT:
+
+  GROUP A:
+    f: 144.90 -> 127.39 (-12.1%) 
+    TVb: 1.22 -> 1.83 (+50.2%) ***
+    MVb: 85.09 -> 188.57 (+121.6%) ***
+    Penh: 1.30 -> 0.71 (-45.4%) ***
+    Ti: 0.30 -> 0.26 (-12.0%) 
+    Te: 0.51 -> 0.37 (-28.3%) **
+    PIFb: 7.24 -> 11.95 (+65.1%) ***
+    PEFb: 4.78 -> 8.86 (+85.3%) ***
+
+  GROUP B:
+    f: 161.28 -> 196.65 (+21.9%) 
+    TVb: 0.67 -> 0.84 (+24.1%) 
+    MVb: 47.75 -> 102.95 (+115.6%) **
+    Penh: 1.38 -> 0.90 (-34.5%) ***
+    Ti: 0.26 -> 0.18 (-31.0%) **
+    Te: 0.43 -> 0.24 (-42.8%) ***
+    PIFb: 3.93 -> 6.44 (+63.7%) *
+    PEFb: 2.82 -> 5.23 (+85.3%) **
+
+  GROUP C:
+    f: 171.67 -> 125.90 (-26.7%) *
+    TVb: 0.86 -> 1.67 (+93.4%) 
+    MVb: 105.62 -> 164.32 (+55.6%) 
+    Penh: 1.83 -> 0.83 (-54.7%) *
+    Ti: 0.25 -> 0.27 (+8.2%) 
+    Te: 0.44 -> 0.33 (-25.9%) *
+    PIFb: 7.27 -> 10.41 (+43.1%) 
+    PEFb: 6.52 -> 8.39 (+28.7%) 
+
+
+TREATMENT EFFECTS (Delta-Delta)
+--------------------------------------------------
+
+GROUP A:
+  f: Baseline change=-46.6%, Exp change=-12.1%, Delta-Delta=+114.01
+  TVb: Baseline change=+14.3%, Exp change=+50.2%, Delta-Delta=+0.45
+  MVb: Baseline change=-36.0%, Exp change=+121.6%, Delta-Delta=+188.88
+  Penh: Baseline change=+4.7%, Exp change=-45.4%, Delta-Delta=-0.61
+  Ti: Baseline change=+59.5%, Exp change=-12.0%, Delta-Delta=-0.11
+  Te: Baseline change=+98.2%, Exp change=-28.3%, Delta-Delta=-0.33
+  PIFb: Baseline change=-22.5%, Exp change=+65.1%, Delta-Delta=+8.07
+  PEFb: Baseline change=-40.0%, Exp change=+85.3%, Delta-Delta=+8.32
+
+GROUP B:
+  f: Baseline change=-48.9%, Exp change=+21.9%, Delta-Delta=+181.73
+  TVb: Baseline change=+21.5%, Exp change=+24.1%, Delta-Delta=-0.06
+  MVb: Baseline change=-40.1%, Exp change=+115.6%, Delta-Delta=+152.15
+  Penh: Baseline change=+23.9%, Exp change=-34.5%, Delta-Delta=-0.56
+  Ti: Baseline change=+72.6%, Exp change=-31.0%, Delta-Delta=-0.16
+  Te: Baseline change=+150.9%, Exp change=-42.8%, Delta-Delta=-0.44
+  PIFb: Baseline change=-24.1%, Exp change=+63.7%, Delta-Delta=+6.09
+  PEFb: Baseline change=-42.0%, Exp change=+85.3%, Delta-Delta=+6.85
+
+GROUP C:
+  f: Baseline change=-45.9%, Exp change=-26.7%, Delta-Delta=+108.48
+  TVb: Baseline change=+18.0%, Exp change=+93.4%, Delta-Delta=+0.63
+  MVb: Baseline change=-43.2%, Exp change=+55.6%, Delta-Delta=+181.42
+  Penh: Baseline change=+8.4%, Exp change=-54.7%, Delta-Delta=-1.03
+  Ti: Baseline change=+80.6%, Exp change=+8.2%, Delta-Delta=-0.06
+  Te: Baseline change=+181.3%, Exp change=-25.9%, Delta-Delta=-0.35
+  PIFb: Baseline change=-28.3%, Exp change=+43.1%, Delta-Delta=+7.63
+  PEFb: Baseline change=-44.0%, Exp change=+28.7%, Delta-Delta=+7.31
