@@ -25,19 +25,22 @@ def load_grouped_data(filepath):
     return sheets
 
 def get_baseline_data(df):
-    """Get baseline data (post-treatment only, as reference)"""
+    """Get baseline data (post-treatment only, as reference)
+    Ignores first 2 minutes after treatment - starts from minute 3"""
     if 'Minutes_from_Time0' not in df.columns:
         return df
-    # Use post-treatment data as baseline reference
-    return df[df['Minutes_from_Time0'] > 0].copy()
+    # Use post-treatment data as baseline reference, starting from minute 3
+    return df[df['Minutes_from_Time0'] >= 3].copy()
 
 def get_pre_post_data(df):
-    """Split experiment data into pre-treatment and post-treatment"""
+    """Split experiment data into pre-treatment and post-treatment
+    Post-treatment ignores first 2 minutes - starts from minute 3"""
     if 'Minutes_from_Time0' not in df.columns:
         return None, None
     
     pre = df[df['Minutes_from_Time0'] < 0].copy()
-    post = df[df['Minutes_from_Time0'] > 0].copy()
+    # Start post-treatment from minute 3 (ignore minutes 1 and 2)
+    post = df[df['Minutes_from_Time0'] >= 3].copy()
     
     return pre, post
 
@@ -87,9 +90,10 @@ def main():
     # ========================================================================
     print("\n" + "="*70)
     print("DATA STRUCTURE:")
-    print("  - BASELINE: Post-treatment data only (used as reference)")
+    print("  - BASELINE: Post-treatment data only, starting from minute 3 (reference)")
     print("  - EXPERIMENT PRE: Before treatment")
-    print("  - EXPERIMENT POST: After treatment")
+    print("  - EXPERIMENT POST: After treatment, starting from minute 3")
+    print("  NOTE: Minutes 1-2 are excluded from post-treatment analysis")
     print("="*70)
     
     # Store all statistics
@@ -249,51 +253,184 @@ def main():
         print(f"  Saved: comparison_{group.replace(' ', '_')}.png")
     
     # ========================================================================
-    # VISUALIZATION 2: Time Course with Baseline Reference
+    # VISUALIZATION 2: Time Course with Baseline Reference (All Groups Combined)
     # ========================================================================
     print("\nCreating time-course plots...")
     
-    fig, axes = plt.subplots(len(groups), 4, figsize=(14, 3*len(groups)))
-    if len(groups) == 1:
-        axes = axes.reshape(1, -1)
+    # Load processed data (individual subjects) for statistical testing
+    print("  Loading processed data for statistical analysis...")
+    baseline_processed = load_grouped_data(os.path.join(directory, "baseline_processed.xlsx"))
+    exp_processed = load_grouped_data(os.path.join(directory, "exp_processed.xlsx"))
+    
+    # Map sheet names to groups (e.g., '1a.WBPth' -> 'group a')
+    def get_group_letter(sheet_name):
+        import re
+        match = re.search(r'\d+([a-zA-Z])', sheet_name)
+        if match:
+            return f"group {match.group(1).lower()}"
+        return None
     
     selected_cols = ['f', 'TVb', 'Penh', 'MVb']
+    group_colors = {'group a': '#E74C3C', 'group b': '#3498DB', 'group c': '#27AE60'}  # Red, Blue, Green
+    group_markers = {'group a': 'o', 'group b': 's', 'group c': '^'}
     
-    for i, group in enumerate(groups):
-        baseline = get_baseline_data(baseline_data[group])
-        experiment = experiment_data[group]
+    fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+    axes = axes.flatten()
+    
+    for j, col in enumerate(selected_cols):
+        ax = axes[j]
         
-        for j, col in enumerate(selected_cols):
-            ax = axes[i, j]
+        # Store data for statistical testing
+        timepoint_data = {}  # {minute: {group: [values]}}
+        
+        for group in groups:
+            color = group_colors.get(group, 'gray')
+            marker = group_markers.get(group, 'o')
+            baseline_full = baseline_data[group]
+            experiment = experiment_data[group]
             
-            # Plot experiment time course
+            all_times = []
+            all_means = []
+            all_sems = []
+            
+            # Get the last 10 minutes of baseline data and map to -20 to -10
+            if 'Minutes_from_Time0' in baseline_full.columns and col in baseline_full.columns:
+                baseline_post = baseline_full[baseline_full['Minutes_from_Time0'] >= 3].copy()
+                if len(baseline_post) > 0:
+                    max_time = baseline_post['Minutes_from_Time0'].max()
+                    # Get last 10 minutes of baseline
+                    last_10_min = baseline_post[baseline_post['Minutes_from_Time0'] >= max_time - 10].copy()
+                    if len(last_10_min) > 0:
+                        # Map to -20 to -10 range
+                        orig_min = last_10_min['Minutes_from_Time0'].min()
+                        orig_max = last_10_min['Minutes_from_Time0'].max()
+                        if orig_max > orig_min:
+                            last_10_min['mapped_time'] = -20 + (last_10_min['Minutes_from_Time0'] - orig_min) / (orig_max - orig_min) * 10
+                        else:
+                            last_10_min['mapped_time'] = -15
+                        
+                        # Group by mapped minute and calculate mean/SEM
+                        last_10_min['mapped_minute'] = last_10_min['mapped_time'].round().astype(int)
+                        for minute, grp in last_10_min.groupby('mapped_minute'):
+                            vals = grp[col].dropna()
+                            if len(vals) > 0:
+                                all_times.append(minute)
+                                all_means.append(vals.mean())
+                                all_sems.append(vals.std() / np.sqrt(len(vals)) if len(vals) > 1 else 0)
+                                # Store for stats
+                                if minute not in timepoint_data:
+                                    timepoint_data[minute] = {}
+                                timepoint_data[minute][group] = vals.values
+            
+            # Get experiment data (limit to 30 min post-treatment)
             if col in experiment.columns and 'Minutes_from_Time0' in experiment.columns:
-                time_vals = experiment['Minutes_from_Time0'].values
-                col_vals = experiment[col].values
-                ax.plot(time_vals, col_vals, '-o', color='coral', label='Experiment', 
-                       markersize=4, alpha=0.8, linewidth=1.5)
+                exp_data = experiment[(experiment['Minutes_from_Time0'] <= 30)].copy()
+                exp_data['minute'] = exp_data['Minutes_from_Time0'].round().astype(int)
+                
+                for minute, grp in exp_data.groupby('minute'):
+                    vals = grp[col].dropna()
+                    if len(vals) > 0:
+                        all_times.append(minute)
+                        all_means.append(vals.mean())
+                        all_sems.append(vals.std() / np.sqrt(len(vals)) if len(vals) > 1 else 0)
+                        # Store for stats
+                        if minute not in timepoint_data:
+                            timepoint_data[minute] = {}
+                        timepoint_data[minute][group] = vals.values
             
-            # Plot baseline as horizontal band (mean +/- SEM)
-            if col in baseline.columns:
-                bl_mean = baseline[col].mean()
-                bl_sem = baseline[col].std() / np.sqrt(len(baseline))
-                ax.axhline(y=bl_mean, color='steelblue', linestyle='-', linewidth=2, label='Baseline')
-                ax.axhspan(bl_mean - bl_sem, bl_mean + bl_sem, alpha=0.3, color='steelblue')
+            # Sort by time
+            if all_times:
+                sorted_idx = np.argsort(all_times)
+                all_times = np.array(all_times)[sorted_idx]
+                all_means = np.array(all_means)[sorted_idx]
+                all_sems = np.array(all_sems)[sorted_idx]
+                
+                # Plot with error bars
+                ax.errorbar(all_times, all_means, yerr=all_sems, 
+                           fmt=f'-{marker}', color=color, 
+                           label=group.replace('group ', 'Group ').upper(),
+                           markersize=5, alpha=0.8, linewidth=1.5, capsize=2, capthick=1)
+        
+        # Collect data from individual subjects (processed files) for statistical testing
+        # This gives us multiple observations per group per timepoint
+        stats_data = {}  # {minute: {group: [values from all subjects]}}
+        
+        # Collect experiment data from processed file
+        for sheet_name, sheet_df in exp_processed.items():
+            grp = get_group_letter(sheet_name)
+            if grp is None or col not in sheet_df.columns or 'Minutes_from_Time0' not in sheet_df.columns:
+                continue
             
-            # Mark treatment time
-            ax.axvline(x=0, color='black', linestyle='--', linewidth=2, label='Treatment')
+            # Get data limited to 30 min post-treatment
+            exp_sheet = sheet_df[(sheet_df['Minutes_from_Time0'] <= 30)].copy()
+            exp_sheet['minute'] = exp_sheet['Minutes_from_Time0'].round().astype(int)
             
-            # Add shading
-            ax.axvspan(ax.get_xlim()[0] if ax.get_xlim()[0] < 0 else -10, 0, alpha=0.1, color='green')
-            ax.axvspan(0, ax.get_xlim()[1] if ax.get_xlim()[1] > 0 else 30, alpha=0.1, color='red')
-            
-            ax.set_xlabel('Minutes from Treatment')
-            ax.set_ylabel(col)
-            ax.set_title(f'{group.upper()}: {col}')
-            
-            if i == 0 and j == 0:
-                ax.legend(loc='best', fontsize=7)
+            for minute, grp_rows in exp_sheet.groupby('minute'):
+                vals = grp_rows[col].dropna().values
+                if len(vals) > 0:
+                    if minute not in stats_data:
+                        stats_data[minute] = {}
+                    if grp not in stats_data[minute]:
+                        stats_data[minute][grp] = []
+                    stats_data[minute][grp].extend(vals)
+        
+        # Perform statistical tests at each timepoint (Kruskal-Wallis - non-parametric)
+        significant_points = []
+        test_count = 0
+        sig_count = 0
+        for minute in sorted(stats_data.keys()):
+            grp_data = stats_data[minute]
+            # Need at least 2 groups with data to compare
+            valid_groups = [g for g in groups if g in grp_data and len(grp_data[g]) >= 2]
+            if len(valid_groups) >= 2:
+                try:
+                    # Use Kruskal-Wallis H-test (non-parametric alternative to one-way ANOVA)
+                    data_arrays = [np.array(grp_data[g]) for g in valid_groups]
+                    test_count += 1
+                    stat, p_val = stats.kruskal(*data_arrays)
+                    if p_val < 0.05:
+                        sig_count += 1
+                        # Get y position for marker (max of all group means at this timepoint)
+                        y_vals = [np.mean(grp_data[g]) for g in valid_groups]
+                        significant_points.append((minute, max(y_vals), p_val))
+                except Exception as e:
+                    pass
+        
+        print(f"    {col}: Tested {test_count} timepoints, found {sig_count} significant")
+        if sig_count > 0:
+            for minute, y_pos, p_val in significant_points:
+                stars = '***' if p_val < 0.001 else '**' if p_val < 0.01 else '*'
+                print(f"      -> Minute {minute}: p={p_val:.4f} {stars}")
+        
+        # Mark significant timepoints with visible markers
+        for minute, y_pos, p_val in significant_points:
+            stars = '***' if p_val < 0.001 else '**' if p_val < 0.01 else '*'
+            # Use a more visible annotation with background
+            ax.annotate(stars, xy=(minute, y_pos), xytext=(minute, y_pos * 1.08),
+                       ha='center', fontsize=10, color='red', fontweight='bold',
+                       bbox=dict(boxstyle='round,pad=0.1', facecolor='yellow', alpha=0.7, edgecolor='none'))
+        
+        # Add vertical lines
+        ax.axvline(x=0, color='black', linestyle='--', linewidth=2, label='Treatment')
+        ax.axvline(x=-10, color='navy', linestyle='--', linewidth=1.5, alpha=0.7)
+        
+        # Set x-axis limits: -25 to 32
+        ax.set_xlim(-25, 32)
+        
+        # Add shading
+        ax.axvspan(-20, -10, alpha=0.2, color='steelblue', label='Baseline Period')
+        ax.axvspan(-10, 0, alpha=0.1, color='green')
+        ax.axvspan(0, 32, alpha=0.1, color='red')
+        
+        ax.set_xlabel('Minutes from Treatment', fontsize=10)
+        ax.set_ylabel(col, fontsize=10)
+        ax.set_title(f'{col} - All Groups Time Course', fontsize=12, fontweight='bold')
+        
+        if j == 0:
+            ax.legend(loc='upper right', fontsize=8)
     
+    plt.suptitle('Time Course Comparison: All Groups\n(* p<0.05, ** p<0.01, *** p<0.001 - Kruskal-Wallis test between groups)', 
+                 fontsize=12, fontweight='bold')
     plt.tight_layout()
     plt.savefig(os.path.join(plots_dir, 'timecourse_vs_baseline.png'), dpi=100, bbox_inches='tight')
     plt.close()
@@ -612,7 +749,9 @@ def main():
         f.write("EXPERIMENT ANALYSIS SUMMARY (v3)\n")
         f.write("================================\n")
         f.write("Analysis compares: Baseline | Experiment Pre | Experiment Post\n")
-        f.write("Baseline = post-treatment data from baseline condition (reference)\n\n")
+        f.write("Baseline = post-treatment data from baseline condition (reference)\n")
+        f.write("NOTE: Post-treatment analysis starts from minute 3 (minutes 1-2 excluded)\n")
+        f.write("NOTE: Timeframe graphs show up to 30 minutes post-treatment\n\n")
         
         f.write("="*70 + "\n")
         f.write("SUMMARY STATISTICS\n")
