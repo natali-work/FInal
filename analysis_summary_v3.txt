@@ -1,0 +1,47 @@
+EXPERIMENT ANALYSIS SUMMARY (v3)
+================================
+Analysis compares: Baseline | Experiment Pre | Experiment Post
+Baseline = post-treatment data from baseline condition (reference)
+NOTE: Post-treatment analysis starts from minute 3 (minutes 1-2 excluded)
+NOTE: Timeframe graphs show up to 30 minutes post-treatment
+
+======================================================================
+SUMMARY STATISTICS
+======================================================================
+
+
+GROUP A
+--------------------------------------------------
+Parameter      Baseline      Exp Pre     Exp Post    Pre vs BL   Post vs BL
+f                153.08       144.90       128.90        -5.3%       -15.8%
+TVb                1.25         1.22         1.77        -2.1%       +42.1%
+MVb              151.34        85.09       190.01       -43.8%       +25.6%
+Penh               0.43         1.30         0.63      +203.7%       +46.6%
+Ti                 0.20         0.30         0.26       +50.7%       +30.0%
+Te                 0.38         0.51         0.35       +33.6%        -9.4%
+PIFb              11.43         7.24        11.75       -36.7%        +2.8%
+PEFb               6.31         4.78         8.82       -24.2%       +39.8%
+
+GROUP B
+--------------------------------------------------
+Parameter      Baseline      Exp Pre     Exp Post    Pre vs BL   Post vs BL
+f                145.88       161.28       198.58       +10.6%       +36.1%
+TVb                1.24         0.67         0.81       -45.9%       -34.6%
+MVb              140.44        47.75       102.54       -66.0%       -27.0%
+Penh               0.46         1.38         0.88      +197.5%       +89.2%
+Ti                 0.20         0.26         0.17       +27.4%       -14.2%
+Te                 0.45         0.43         0.24        -3.9%       -46.9%
+PIFb              11.17         3.93         6.37       -64.8%       -43.0%
+PEFb               5.96         2.82         5.21       -52.6%       -12.5%
+
+GROUP C
+--------------------------------------------------
+Parameter      Baseline      Exp Pre     Exp Post    Pre vs BL   Post vs BL
+f                171.58       171.67       124.46        +0.1%       -27.5%
+TVb                1.17         0.86         1.44       -26.4%       +22.6%
+MVb              154.18       105.62       154.58       -31.5%        +0.3%
+Penh               0.45         1.83         0.79      +309.2%       +77.8%
+Ti                 0.20         0.25         0.27       +27.4%       +37.1%
+Te                 0.39         0.44         0.32       +14.2%       -17.7%
+PIFb              11.09         7.27         9.19       -34.4%       -17.1%
+PEFb               6.56         6.52         7.53        -0.6%       +14.8%
