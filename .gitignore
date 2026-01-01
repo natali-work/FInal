@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# Excel files
+*.xlsx
+*.xls
+
+# Output files
+*.txt
+*.png
+analysis_plots*/
+comparison_plots*/
+test/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Old versions
+older versions/
+
